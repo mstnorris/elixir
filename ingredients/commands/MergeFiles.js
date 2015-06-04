@@ -5,6 +5,7 @@ var merge = require('merge-stream');
 var utilities = require('./Utilities');
 var plugins = require('gulp-load-plugins')();
 var config = require('laravel-elixir').config;
+var Notification = require('./Notification');
 
 
 /**
@@ -49,7 +50,8 @@ var buildTask = function(request) {
         // for each one, trigger Gulp. To keep from crossing
         // the streams, we'll use the merge-stream plugin.
         return merge.apply(this, toConcat.map(function(set) {
-            return mergeFileSet(set, request);
+            return mergeFileSet(set, request)
+            .pipe(new Notification().message('Files merged!'));
         }));
     });
 
